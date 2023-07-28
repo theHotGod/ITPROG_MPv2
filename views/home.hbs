@@ -1,0 +1,34 @@
+<script src="/js/addcart.js" defer></script>
+
+
+{{>nav}}
+
+
+{{!-- {{if dish}}
+    {{each dish}}
+        {{>dishes}}
+    {{/each}}
+{{/if}} --}}
+<div class="container dishes">
+  <div class="row">
+
+  {{#if dish}}
+    {{#each dish}}
+      {{>dishes item=dishName category=dishCategory price=dishPrice id=dishID}}
+    {{/each}}
+  {{/if}}
+  </div>
+
+
+</div>
+
+
+<br/><br/><br/>
+
+  <div class="container total-section d-flex justify-content-center align-items-center">
+        <span class="total-label">Total:&nbsp;</span>
+        <span class="total-value"> Php <span class="total"> </span> </span>
+      </div>
+    <div class="container d-flex justify-content-center align-items-center">
+        <button id="checkoutbtn" class="btn btn-primary"> Checkout </button>
+    </div>

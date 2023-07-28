@@ -1,0 +1,33 @@
+.card-dish {
+    width: 270px;
+    height: 475px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-body {
+    flex-grow: 1;
+}
+
+.card-img-top {
+    width: 200px;
+    height: 180px;
+    justify-content: center;
+
+}
+.card.card-dish:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;  
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+
+  /* Hide the arrow buttons in Chrome, Safari, Edge, and Opera */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
