@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         console.log('Add to cart clicked for dish ID:', dishID);
         console.log('Quantity:', quantities[dishID] || 0);
         
+
+        const testing = document.getElementById('total');
+        testing.innerHTML = priceValue.toString();
         // Update selected main dish and quantity
         selectedMainDishID = dishID;
         selectedMainDishQuantity = quantities[dishID] || 0;
