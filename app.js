@@ -26,8 +26,16 @@ app.engine('hbs', exphbs.engine({
 
 
 app.get('/', (req, res) => {
-    const getDish = "SELECT * FROM dish WHERE dishCategory='Mains'";
-    con.query(getDish, (err, result) => {
+    const getDishMain = `SELECT * 
+                         FROM dish
+                         ORDER BY
+                         CASE 
+                            WHEN dishCategory = 'Mains' THEN 1
+                            WHEN dishCategory = 'Sides' THEN 2
+                            WHEN dishCategory = 'Drinks' THEN 3
+                            ELSE 4
+                        END ASC`;
+    con.query(getDishMain, (err, result) => {
       if (err)
         throw err;
       console.log(result);
@@ -78,3 +86,6 @@ app.get('/login', (req, res) => {
 app.listen(port, () => {
     console.log('running');
 });
+
+
+module.exports = con;
