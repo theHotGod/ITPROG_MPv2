@@ -14,7 +14,13 @@
     width: 200px;
     height: 180px;
     justify-content: center;
+    border-radius: 50%;
+    border: 2px solid;
 
+}
+
+.container.img {
+  background-color: lightgray;
 }
 .card.card-dish:hover {
     transform: scale(1.1);
