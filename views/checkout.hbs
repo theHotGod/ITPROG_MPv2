@@ -1,21 +1,12 @@
-{{>nav}}
-
-<div class="container bg-secondary">
+<div class="container">
     <div class="header text-center"> 
-        <h1 style="color: white"> Checkout </h1>
+        <h1> Checkout </h1>
     </div>
-    <div class="container dishes"> 
-        <div class="row">
-            {{#if cartItems}}
-                {{#each cartItems}}
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{this.dishID}}</h5>
-                                <p class="card-text">Quantity: {{this.quantity}}</p>
-                            </div>
-                        </div>
-                    </div>
+    <div class="container"> 
+        <div class="card-group">
+            {{#if cart}}
+                {{#each cart}}
+                    {{>dishesCart item=dishName category=dishCategory price=dishPrice quantity=quantity}}
                 {{/each}}
             {{else}}
                 <div class="error text-center">

@@ -124,8 +124,11 @@ document.addEventListener('DOMContentLoaded', (e) => {
       },
       body: JSON.stringify(cartItems),
 
-    }).then((response) => response.json()).then((data) => {
+    }).then((response) => response.text()
+    ).then((data) => {
       console.log("data: ", data);
+
+      document.querySelector('.container.dishes').innerHTML = data;
     }).catch((err) => {
       console.error(err);
     });

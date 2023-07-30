@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="/css/dish.css">
+
+<div class="col-3">
+    <div class="card card-dish">
+        <div class="card-body">
+            <div class="container img">
+                <img src="/img/{{item}}.jpeg" alt="" class="card-img-top">
+            </div>
+             
+            <h2 class="card-title" style="font-size: 20px">
+                {{item}}
+            </h2>
+            <p class="card-category" style="font-size: 15px; font-style:italic">{{category}}</p>
+            <span id="price{{id}}" class="card-subtitle" style="font-size: 15px;"> Php {{price}} </span>
+            <br/>
+            <span> Quantity: {{quantity}}</span>
+        </div>
+    </div>
+</div>

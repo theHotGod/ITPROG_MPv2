@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const exphbs = require('express-handlebars');
 var mysql = require('mysql');
+const bodyParser = require('body-parser');
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -20,6 +21,7 @@ con.connect(function(err) {
 
 app.use(express.static('public'));
 app.set('view engine', 'hbs');
+app.use(bodyParser.json());
 app.engine('hbs', exphbs.engine({
     extname: 'hbs'
 }));
@@ -38,7 +40,7 @@ app.get('/', (req, res) => {
     con.query(getDishMain, (err, result) => {
       if (err)
         throw err;
-      console.log(result);
+      //console.log(result);
       res.render('home', {
         dish: result
       });
@@ -46,34 +48,50 @@ app.get('/', (req, res) => {
     
 });
 
-app.get('/side', (req, res) => {
-    const getDish = "SELECT * FROM dish WHERE dishCategory='Sides'";
-    con.query(getDish, (err, result) => {
-        if(err) 
-          throw err;
-        
-        res.render('home', {
-          dish: result
-        });
+app.post('/checkout', (req, res) => {
+  const cartItems = req.body;
+
+  // store results
+  const results = [];
+
+  const fetchDish = (dishID, dishQty) => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM dish WHERE dishID = ?`;
+      con.query(query, [dishID], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (rows.length > 0) {
+            const dishData = { ...rows[0], quantity: dishQty };
+            resolve(dishData);
+          } else {
+            reject(new Error('No dish'));
+          }
+        }
+      });
     });
+  };
+
+  (async () => {
+    try {
+      for (const cartItem of cartItems) {
+        const dishID = cartItem.dishID;
+        const dishQty = cartItem.quantity;
+        const dishData = await fetchDish(dishID, dishQty);
+        results.push(dishData);
+      }
+      // Send the results back to the frontend
+      res.render('checkout', {
+        cart: results
+      })
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Something went wrong' });
+    }
+  })(); // <-- Call the IIFE here 
 });
 
-app.get('/drink', (req, res) => {
-    const getDish = "SELECT * FROM dish WHERE dishCategory='Drinks'";
-    con.query(getDish, (err, result) => {
-        if (err)
-          throw err;
-        
-        res.render('home', {
-          dish: result
-        })
-    });
-});
 
-
-app.get('/checkout', (req, res) => {
-    res.render('checkout');
-});
 
 app.get('/main', (req, res) => {
     res.redirect('/');
@@ -82,6 +100,10 @@ app.get('/main', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
+
+app.get('/checkout', (req, res) => {
+  res.render('checkout');
+})
 
 app.listen(port, () => {
     console.log('running');
