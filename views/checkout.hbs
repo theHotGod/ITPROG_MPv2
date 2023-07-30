@@ -6,18 +6,22 @@
     </div>
     <div class="container dishes"> 
         <div class="row">
-            {{#if dish}}
-                {{#each dish}}
-                    {{>dishes}}
+            {{#if cartItems}}
+                {{#each cartItems}}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.dishID}}</h5>
+                                <p class="card-text">Quantity: {{this.quantity}}</p>
+                            </div>
+                        </div>
+                    </div>
                 {{/each}}
             {{else}}
                 <div class="error text-center">
                     <h2 style="color: white"> Your Cart is Empty! </h2>
                 </div>
-            {{/if}}
-            
-                
-            
+            {{/if}}      
         </div>
     </div>
 </div>

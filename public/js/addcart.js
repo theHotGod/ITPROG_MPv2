@@ -105,8 +105,30 @@ document.addEventListener('DOMContentLoaded', (e) => {
     })
   });
 
-  checkoutBtn?.addEventListener('click', (e) => {
+  checkoutBtn.addEventListener('click', (e) => {
     console.log('Clicked checkout button');
+    // Convert the quantities object into an array of items with dishID and quantity
+    const cartItems = Object.entries(quantities).map(([dishID, quantity]) => ({
+      dishID,
+      quantity,
+    }));
+
+    console.log(quantities);
+
+    console.log(cartItems);
+
+    fetch('/checkout', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json', 
+      },
+      body: JSON.stringify(cartItems),
+
+    }).then((response) => response.json()).then((data) => {
+      console.log("data: ", data);
+    }).catch((err) => {
+      console.error(err);
+    });
   });
 
 });
