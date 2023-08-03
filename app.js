@@ -5,6 +5,7 @@ const exphbs = require('express-handlebars');
 var mysql = require('mysql');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const path = require('path');
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -123,8 +124,12 @@ app.get('/main', (req, res) => {
     res.redirect('/');
 });
 
+const viewsFolderPath = path.join(__dirname, 'views');
+
 app.get('/login', (req, res) => {
-    res.render('login');
+    const loginFilePath = path.join(viewsFolderPath, 'login.php');
+    res.set('Content-Type', 'text/html');
+    res.sendFile(loginFilePath);
 });
 
 app.listen(port, () => {
