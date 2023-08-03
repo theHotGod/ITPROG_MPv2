@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="/css/dish.css">
-
+<link rel="stylesheet" href="/css/dishCart.css">
+{{!-- 
 <div class="col-3">
     <div class="card card-dish">
         <div class="card-body">
             <div class="container img">
-                <img src="/img/{{item}}.jpeg" alt="" class="card-img-top">
+                <img src="/img/{{item}}.jpeg" alt="">
             </div>
              
             <h2 class="card-title" style="font-size: 20px">
@@ -16,4 +16,22 @@
             <span> Quantity: {{quantity}}</span>
         </div>
     </div>
+</div> --}}
+
+<div class="col-3">
+    <div class="card">
+  <img src="/img/{{item}}.jpeg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <div class="text-section">
+        <h5 class="card-title">{{item}}</h5>
+        <p class="card-category">{{category}}</p>
+        <p class="card-price">Php {{price}}</p>
+    </div>
+    
+    <div class="dish-total-section">
+        <p class="card-dish-price"> x{{quantity}}</p>
+    </div>
+  </div>
 </div>
+</div>
+

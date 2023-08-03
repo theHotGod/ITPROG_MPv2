@@ -107,31 +107,41 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
   checkoutBtn.addEventListener('click', (e) => {
     console.log('Clicked checkout button');
-    // Convert the quantities object into an array of items with dishID and quantity
-    const cartItems = Object.entries(quantities).map(([dishID, quantity]) => ({
-      dishID,
-      quantity,
-    }));
+    // Convert the quantities object into an array of items with dishID, quantity, name, and category
+    const cartItems = Object.entries(quantities).map(([dishID, quantity]) => {
+      const name = document.querySelector(`.card-title${dishID}`).textContent.trim();
+      const category = document.querySelector(`.card-category${dishID}`).textContent;
+      const tempPrice = document.querySelector(`#price${dishID}`).textContent;
+      const tempTotal = document.querySelector(`#total`).textContent;
 
-    console.log(quantities);
-
-    console.log(cartItems);
-
-    fetch('/checkout', {
+      const total = parseInt(tempTotal);
+      const stringPrice = tempPrice.replace('Php', '');
+      const price = parseInt(stringPrice);
+      return {
+        dishID,
+        quantity,
+        name,
+        category,
+        price,
+        total
+      };
+    });
+  
+    fetch('/addCart', {
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json', 
       },
       body: JSON.stringify(cartItems),
-
     }).then((response) => response.text()
     ).then((data) => {
       console.log("data: ", data);
-
       document.querySelector('.container.dishes').innerHTML = data;
+      window.location.href = ('/checkout');
     }).catch((err) => {
       console.error(err);
     });
   });
+  
 
 });

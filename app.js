@@ -4,6 +4,7 @@ const port = 3000;
 const exphbs = require('express-handlebars');
 var mysql = require('mysql');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -25,6 +26,12 @@ app.use(bodyParser.json());
 app.engine('hbs', exphbs.engine({
     extname: 'hbs'
 }));
+
+app.use(session({
+  secret: 'hello-world',
+  resave: false,
+  saveUninitialized: true
+}))
 
 
 app.get('/', (req, res) => {
@@ -48,47 +55,66 @@ app.get('/', (req, res) => {
     
 });
 
-app.post('/checkout', (req, res) => {
+app.post('/addCart', (req, res) => {
   const cartItems = req.body;
 
   // store results
   const results = [];
 
-  const fetchDish = (dishID, dishQty) => {
-    return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM dish WHERE dishID = ?`;
-      con.query(query, [dishID], (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          if (rows.length > 0) {
-            const dishData = { ...rows[0], quantity: dishQty };
-            resolve(dishData);
-          } else {
-            reject(new Error('No dish'));
-          }
-        }
-      });
-    });
-  };
+  req.session.cartItems = cartItems;
+  console.log('cart: ', cartItems);
 
-  (async () => {
-    try {
-      for (const cartItem of cartItems) {
-        const dishID = cartItem.dishID;
-        const dishQty = cartItem.quantity;
-        const dishData = await fetchDish(dishID, dishQty);
-        results.push(dishData);
-      }
-      // Send the results back to the frontend
-      res.render('checkout', {
-        cart: results
-      })
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Something went wrong' });
-    }
-  })(); // <-- Call the IIFE here 
+  console.log(req.body.price);
+
+
+  // const fetchDish = (dishID, dishQty) => {
+  //   return new Promise((resolve, reject) => {
+  //     const query = `SELECT * FROM dish WHERE dishID = ?`;
+  //     con.query(query, [dishID], (err, rows) => {
+  //       if (err) {
+  //         reject(err);
+  //       } else {
+  //         if (rows.length > 0) {
+  //           const dishData = { ...rows[0], quantity: dishQty };
+  //           resolve(dishData);
+  //         } else {
+  //           reject(new Error('No dish'));
+  //         }
+  //       }
+  //     });
+  //   });
+  // };
+
+  // (async () => {
+  //   try {
+  //     for (const cartItem of cartItems) {
+  //       const dishID = cartItem.dishID;
+  //       const dishQty = cartItem.quantity;
+  //       const dishData = await fetchDish(dishID, dishQty);
+  //       results.push(dishData);
+  //     }
+  //     // Send the results back to the frontend
+  //     res.render('checkout', {
+  //       cart: results
+  //     })
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json({ error: 'Something went wrong' });
+  //   }
+  // })(); // <-- Call the IIFE here 
+
+
+  res.redirect('/checkout')
+});
+
+app.get('/checkout', (req, res) => {
+  const cartItems = req.session.cartItems || [];
+
+  console.log('get checkout: ', cartItems);
+
+  res.render('checkout', {
+    cart: cartItems
+  })
 });
 
 
@@ -100,10 +126,6 @@ app.get('/main', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
-
-app.get('/checkout', (req, res) => {
-  res.render('checkout');
-})
 
 app.listen(port, () => {
     console.log('running');

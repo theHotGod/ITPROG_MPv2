@@ -7,11 +7,11 @@
                 <img src="/img/{{item}}.jpeg" alt="" class="card-img-top">
             </div>
              
-            <h2 class="card-title" style="font-size: 20px">
+            <h2 class="card-title{{dishID}}" style="font-size: 20px">
                 {{item}}
             </h2>
-            <p class="card-category" style="font-size: 15px; font-style:italic">{{category}}</p>
-            <span id="price{{id}}" class="card-subtitle" style="font-size: 15px;"> Php {{price}} </span>
+            <p class="card-category{{dishID}}" style="font-size: 15px; font-style:italic">{{category}}</p>
+            <span id="price{{id}}" class="card-subtitle" style="font-size: 15px;"> Php{{price}} </span>
             
             <!-- Plus-minus counter with Bootstrap input group -->
             <div class="input-group mt-3">
