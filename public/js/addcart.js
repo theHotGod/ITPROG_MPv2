@@ -40,6 +40,24 @@ document.addEventListener('DOMContentLoaded', (e) => {
     total.innerHTML = totalPrice;
   }
 
+  function categorySelected(dishID) {
+    const category = document.querySelector(`.card-category${dishID}`);
+    const chosenCategory = category.innerHTML;
+    console.log("you've chosen category: ", chosenCategory);
+  
+    addCartBtns.forEach((addCartBtn) => {
+      const btnID = addCartBtn.id;
+      //console.log(btnID);
+      const btnDishID = btnID.replace('Card', '');
+      const btnCategory = document.querySelector(`.card-category${btnDishID}`).innerHTML;
+      
+      if (btnDishID !== dishID && btnCategory === chosenCategory) {
+        addCartBtn.disabled = true;
+      }
+    });
+  }
+  
+
   // button functionalities
   minusBtns.forEach((minusBtn) => {
     minusBtn.addEventListener('click', (e) => {
@@ -90,6 +108,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
       console.log('Add to Cart for Dish ID: ', dishID);
       updateTotalPrice();
+      categorySelected(dishID);
     });
   });
 
@@ -102,6 +121,18 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
       console.log('Remove for Dish ID: ', dishID);
       updateTotalPrice();
+
+      const category = document.querySelector(`.card-category${dishID}`);
+      const chosenCategory = category.innerHTML;
+      addCartBtns.forEach((addCartBtn) => {
+        const btnID = addCartBtn.id;
+        const btnDishID = btnID.replace('Card', '');
+        const btnCategory = document.querySelector(`.card-category${btnDishID}`).innerHTML;
+
+        if (btnCategory === chosenCategory) {
+          addCartBtn.disabled = false;
+        }
+      });
     })
   });
 
