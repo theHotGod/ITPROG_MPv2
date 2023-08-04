@@ -21,6 +21,8 @@ con.connect(function(err) {
 });
 
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.static('public'));
 app.set('view engine', 'hbs');
 app.use(bodyParser.json());
@@ -102,16 +104,102 @@ app.get('/checkout', (req, res) => {
       console.log('totalPriceAfterDiscount: ', totalPriceAfterDiscount);
 
 
+      // Add totalPrice to the session when there is no discount
+      if (!discount) {
+        req.session.totalPrice = totalPrice;
+      } else {
+        // If there is a discount, make sure totalPrice is not present in the session
+        delete req.session.totalPrice;
+      }
+
+      req.session.totalPriceAfterDiscount = discount ? totalPriceAfterDiscount : null;
+
+
       res.render('checkout', {
-        cart: cartItems,
-        comboName: discount ? comboName : null,
-        discount: formattedDiscount,
-        totalPrice: totalPrice.toFixed(2),
-        totalPriceAfterDiscount: discount ? totalPriceAfterDiscount : null,
-      });
+    cart: cartItems,
+    comboName: discount ? comboName : null,
+    discount: formattedDiscount,
+    totalPrice: totalPrice.toFixed(2),
+    totalPriceAfterDiscount: discount ? totalPriceAfterDiscount : null,
+  });
     }
   });
 });
+
+app.post('/cancel', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Failed to cancel the order');
+      } else {
+        console.log('Order canceled successfully');
+        res.sendStatus(200);
+      }
+  });
+}); 
+
+app.post('/submitOrder', (req, res) => {
+  const cartItems = req.session.cartItems || [];
+
+  const custName = req.body.customerName;
+  const payment = req.body.payment;
+
+  const totalPriceAfterDiscount = req.session.totalPriceAfterDiscount;
+
+  // Check if totalPriceAfterDiscount is present in the session
+  // If not, calculate the total price as done in the /checkout route
+  let totalPrice;
+  if (totalPriceAfterDiscount) {
+    // If there is a discount, we already have totalPriceAfterDiscount in the session
+    // So, no need to recalculate it
+    delete req.session.totalPriceAfterDiscount;
+  } else {
+    // If there is no discount, retrieve the totalPrice from the session
+    totalPrice = req.session.totalPrice;
+    delete req.session.totalPrice; // Remove totalPrice from the session
+  }
+
+  console.log("totalPriceAfterDiscount: ", totalPriceAfterDiscount);
+  console.log("totalPrice: ", totalPrice);
+  console.log("custName: ", custName);
+
+  const priceToInsert = totalPriceAfterDiscount || totalPrice;
+
+  // Insert order into the 'orders' table
+  const date = new Date();
+  con.query("INSERT INTO orders (totalPrice, orderBy, orderedAt) VALUES (?, ?, ?)", [totalPriceAfterDiscount || totalPrice, custName, date], (err, result) => {
+    if (err) throw err;
+
+    // Get the last inserted order ID
+    con.query("SELECT MAX(orderID) AS orderID FROM orders", (err, result) => {
+      if (err) throw err;
+      const orderID = result[0].orderID;
+
+      // Prepare data for inserting into 'order_items' table
+      const orderItems = cartItems
+        .filter(item => item.quantity > 0)
+        .map(item => [orderID, item.name, item.quantity]);
+
+      // Insert order items into 'order_items' table
+      const insertOrderItemsQuery = "INSERT INTO order_item (orderID, dishName, quantity) VALUES ?";
+      con.query(insertOrderItemsQuery, [orderItems], (err, result) => {
+        if (err) throw err;
+
+        console.log("Order items inserted!");
+      });
+    });
+
+    console.log("Order data inserted!");
+
+    // Clear the cart after successful order submission
+    req.session.cartItems = [];
+
+    // Redirect to the success page or any other page as desired
+    res.redirect('/success');
+  });
+});
+
+
 
 function discountCheck(mainDish, sideDish, drink, callback) {
   const cart = [mainDish, sideDish, drink];
