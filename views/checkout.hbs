@@ -29,7 +29,7 @@
         <p>Total Price: P<span id="totalPrice">{{ totalPrice }}</span></p>
       </div>
     {{/if}}
-    <form class="form-checkout">
+    <form class="form-checkout" action="/submitOrder" method="post">
         <div class="form-group">
             <label for="customerName">Customer Name:</label>
             <input type="text" id="customerName" name="customerName" required>
@@ -38,6 +38,6 @@
             <label for="payment">Payment:</label>
             <input type="text" id="payment" name="payment" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Order</button>
+        <button id="submitbtn" type="submit" class="btn btn-primary">Submit Order</button>
     </form>
 </div>
