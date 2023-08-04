@@ -122,6 +122,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
       console.log('Remove for Dish ID: ', dishID);
       updateTotalPrice();
 
+      delete quantities[dishID];
       const category = document.querySelector(`.card-category${dishID}`);
       const chosenCategory = category.innerHTML;
       addCartBtns.forEach((addCartBtn) => {
