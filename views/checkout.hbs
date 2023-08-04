@@ -1,15 +1,13 @@
 {{>nav}}
 <style>
-    .container-crd {
-        background-color: white;
-    }
+
 </style>
 <div class="container-crd">
     <div class="header text-center"> 
         <h1> Checkout </h1>
     </div>
     <div class="container"> 
-        <div class="card-group">
+        <div class="card-group flex-col">
             {{#if cart}}
                 {{#each cart}}
                     {{>dishesCart item=name category=category price=price quantity=quantity}}

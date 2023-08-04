@@ -12,7 +12,7 @@ var con = mysql.createConnection({
   user: "root",
   password: "",
   database: "dbclient_side",
-  port: 3307
+  port: 3306
 });
 
 con.connect(function(err) {
@@ -67,45 +67,7 @@ app.post('/addCart', (req, res) => {
 
   console.log(req.body.price);
 
-
-  // const fetchDish = (dishID, dishQty) => {
-  //   return new Promise((resolve, reject) => {
-  //     const query = `SELECT * FROM dish WHERE dishID = ?`;
-  //     con.query(query, [dishID], (err, rows) => {
-  //       if (err) {
-  //         reject(err);
-  //       } else {
-  //         if (rows.length > 0) {
-  //           const dishData = { ...rows[0], quantity: dishQty };
-  //           resolve(dishData);
-  //         } else {
-  //           reject(new Error('No dish'));
-  //         }
-  //       }
-  //     });
-  //   });
-  // };
-
-  // (async () => {
-  //   try {
-  //     for (const cartItem of cartItems) {
-  //       const dishID = cartItem.dishID;
-  //       const dishQty = cartItem.quantity;
-  //       const dishData = await fetchDish(dishID, dishQty);
-  //       results.push(dishData);
-  //     }
-  //     // Send the results back to the frontend
-  //     res.render('checkout', {
-  //       cart: results
-  //     })
-  //   } catch (err) {
-  //     console.error(err);
-  //     res.status(500).json({ error: 'Something went wrong' });
-  //   }
-  // })(); // <-- Call the IIFE here 
-
-
-  res.redirect('/checkout')
+  res.sendStatus(200);
 });
 
 app.get('/checkout', (req, res) => {
@@ -131,6 +93,12 @@ app.get('/login', (req, res) => {
     res.set('Content-Type', 'text/html');
     res.sendFile(loginFilePath);
 });
+
+app.post('/check.php', (req, res) => {
+    const filePath = path.join(viewsFolderPath, 'check.php');
+    res.set('Content-Type', 'text/html');
+    res.sendFile(filePath);
+})
 
 app.listen(port, () => {
     console.log('running');
