@@ -10,7 +10,7 @@ const path = require('path');
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "p@ssword",
+  password: "",
   database: "dbclient_side",
   port: 3306
 });
@@ -152,25 +152,21 @@ function discountCheck(mainDish, sideDish, drink, callback) {
   });
 }
 
-
-
 app.get('/main', (req, res) => {
     res.redirect('/');
 });
 
-const viewsFolderPath = path.join(__dirname, 'views');
-
-app.get('/login', (req, res) => {
-    const loginFilePath = path.join(viewsFolderPath, 'login.php');
-    res.set('Content-Type', 'text/html');
-    res.sendFile(loginFilePath);
+app.post('/cancel', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Failed to cancel the order');
+      } else {
+          console.log('Order canceled successfully');
+          res.sendStatus(200);
+      }
+  });
 });
-
-app.post('/check.php', (req, res) => {
-    const filePath = path.join(viewsFolderPath, 'check.php');
-    res.set('Content-Type', 'text/html');
-    res.sendFile(filePath);
-})
 
 app.listen(port, () => {
     console.log('running');
