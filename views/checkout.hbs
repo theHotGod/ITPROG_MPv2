@@ -1,3 +1,5 @@
+<script src="/js/checkout.js" defer></script>
+
 {{!-- checkout.hbs --}}
 {{>nav}}
 <style>
@@ -6,28 +8,28 @@
     }
 </style>
 <div class="container-crd">
-    <div class="header text-center"> 
+    <div class="header text-center">
         <h1> Checkout </h1>
     </div>
-    <div class="container"> 
+    <div class="container">
         <div class="card-group flex-col">
             {{#if cart}}
-                {{#each cart}}
-                    {{>dishesCart item=name category=category price=price quantity=quantity}}
-                {{/each}}
-            {{/if}}      
+            {{#each cart}}
+            {{>dishesCart item=name category=category price=price quantity=quantity}}
+            {{/each}}
+            {{/if}}
         </div>
     </div>
     {{#if discount}}
-      <div class="text-center combo-info"> <!-- Added text-center class here -->
+    <div class="text-center combo-info"> <!-- Added text-center class here -->
         <p>Combo Name: <span id="comboName">{{ comboName }}</span></p>
         <p>Discount: <span id="discount">{{ discount }}</span></p>
         <p>Total Price After Discount: P<span id="totalAfterDiscount">{{ totalPriceAfterDiscount }}</span></p>
-      </div>
+    </div>
     {{else}}
-      <div class="text-center combo-info"> <!-- Added text-center class here -->
+    <div class="text-center combo-info"> <!-- Added text-center class here -->
         <p>Total Price: P<span id="totalPrice">{{ totalPrice }}</span></p>
-      </div>
+    </div>
     {{/if}}
     <form class="form-checkout" action="/submitOrder" method="post">
         <div class="form-group">
@@ -39,5 +41,7 @@
             <input type="text" id="payment" name="payment" required>
         </div>
         <button id="submitbtn" type="submit" class="btn btn-primary">Submit Order</button>
+        <button id="cancel-btn" class="btn btn-secondary">Cancel Order</button>
     </form>
+
 </div>

@@ -164,6 +164,18 @@ app.get('/checkout', (req, res) => {
   });
 });
 
+app.post('/cancel', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Failed to cancel the order');
+      } else {
+        console.log('Order canceled successfully');
+        res.sendStatus(200);
+      }
+  });
+}); 
+
 app.post('/submitOrder', (req, res) => {
   const cartItems = req.session.cartItems || [];
 
