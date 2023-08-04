@@ -1,7 +1,8 @@
+{{!-- checkout.hbs --}}
 {{>nav}}
 <style>
     .container-crd {
-        background-color: white;
+        /* background-color: white; */
     }
 </style>
 <div class="container-crd">
@@ -9,7 +10,7 @@
         <h1> Checkout </h1>
     </div>
     <div class="container"> 
-        <div class="card-group">
+        <div class="card-group flex-col">
             {{#if cart}}
                 {{#each cart}}
                     {{>dishesCart item=name category=category price=price quantity=quantity}}
@@ -17,15 +18,26 @@
             {{/if}}      
         </div>
     </div>
-        <form>
-            <div class="form-group">
-                <label for="customerName">Customer Name:</label>
-                <input type="text" id="customerName" name="customerName" required>
-            </div>
-            <div class="form-group">
-                <label for="payment">Payment:</label>
-                <input type="text" id="payment" name="payment" required>
-            </div>
-            <button type="submit">Submit Order</button>
-        </form>
+    {{#if discount}}
+      <div class="text-center combo-info"> <!-- Added text-center class here -->
+        <p>Combo Name: <span id="comboName">{{ comboName }}</span></p>
+        <p>Discount: <span id="discount">{{ discount }}</span></p>
+        <p>Total Price After Discount: P<span id="totalAfterDiscount">{{ totalPriceAfterDiscount }}</span></p>
+      </div>
+    {{else}}
+      <div class="text-center combo-info"> <!-- Added text-center class here -->
+        <p>Total Price: P<span id="totalPrice">{{ totalPrice }}</span></p>
+      </div>
+    {{/if}}
+    <form class="form-checkout">
+        <div class="form-group">
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" name="customerName" required>
+        </div>
+        <div class="form-group">
+            <label for="payment">Payment:</label>
+            <input type="text" id="payment" name="payment" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Order</button>
+    </form>
 </div>
