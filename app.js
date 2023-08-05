@@ -176,6 +176,9 @@ app.post('/submitOrder', (req, res) => {
   const custName = req.body.customerName;
   const payment = req.body.payment;
 
+  req.session.customerName = custName;
+  req.session.payment = payment;
+
   const totalPriceAfterDiscount = req.session.totalPriceAfterDiscount;
 
   // Check if totalPriceAfterDiscount is present in the session
@@ -199,6 +202,7 @@ app.post('/submitOrder', (req, res) => {
   console.log("totalPriceAfterDiscount: ", totalPriceAfterDiscount);
   console.log("totalPrice: ", totalPrice);
   console.log("custName: ", custName);
+  console.log("payment: ", payment);
   console.log("totalDiscount: ", totalDiscount);
 
   const priceToInsert = totalPriceAfterDiscount || totalPrice;
@@ -242,6 +246,9 @@ app.get('/success', (req, res) => {
   const totalPrice = req.session.totalPrice || 0;
   const totalPriceAfterDiscount = req.session.totalPriceAfterDiscount || null;
 
+  const customerName = req.session.customerName || '';
+  const payment = req.session.payment || '';
+
   const mainDishName = cartItems.find(item => item.category === 'Mains')?.name;
   const sideDishName = cartItems.find(item => item.category === 'Sides')?.name;
   const drinkDishName = cartItems.find(item => item.category === 'Drinks')?.name;
@@ -265,10 +272,21 @@ app.get('/success', (req, res) => {
       console.log("sideDishName: ", sideDishName);
       console.log("drinkDishName: ", drinkDishName);
 
+      console.log("customerName: ", customerName);
+      console.log("payment: ", payment);
+
       console.log("comboName: ", comboName);
       console.log("discount: ", discount);
       console.log("formattedDiscount: ", formattedDiscount);
       console.log("totalPriceAfterDiscountFormatted: ", totalPriceAfterDiscountFormatted);
+      
+      let difference;
+      if (totalPriceAfterDiscount) {
+        difference = payment - totalPriceAfterDiscount;
+      } else {
+        difference = payment - totalPrice;
+      }
+      
 
       res.render('success', {
         cart: cartItems,
@@ -276,6 +294,9 @@ app.get('/success', (req, res) => {
         discount: formattedDiscount,
         totalPrice: totalPrice.toFixed(2),
         totalPriceAfterDiscount: totalPriceAfterDiscountFormatted,
+        customerName: customerName, // Pass the customerName to the success page
+        payment: payment, // Pass the payment to the success page
+        difference: difference.toFixed(2), 
       });
     }
   });
