@@ -36,11 +36,11 @@
     <form class="form-checkout" action="/submitOrder" method="post">
         <div class="form-group">
             <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" name="customerName">
+            <input type="text" id="customerName" name="customerName" required>
         </div>
         <div class="form-group">
             <label for="payment">Payment:</label>
-            <input type="text" id="payment" name="payment">
+            <input type="text" id="payment" name="payment" required>
         </div>
         <button id="submitbtn" type="submit" class="btn btn-primary">Submit Order</button>
         <button id="cancel-btn" class="btn btn-secondary">Cancel Order</button>
