@@ -1,18 +1,76 @@
-{{>nav}}
+{{! Include the "nav" partial if available }}
+{{> nav}}
 
-<div>
-    <h1>Your Order Details</h1>
-    <ul>
+<div class="container">
+  <h1>Your Order Details</h1>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
         {{#each cart}}
-        <li>{{this.name}} - Quantity: {{this.quantity}} - Price: {{this.price}}</li>
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.quantity}}</td>
+          <td>{{this.price}}</td>
+        </tr>
         {{/each}}
-    </ul>
-    <p>Total Price: {{totalPrice}}</p>
-    {{#if discount}}
-    <p>Combo Name: {{comboName}}</p>
-    <p>Discount: {{discount}}</p>
-    <p>Total Price After Discount: {{totalPriceAfterDiscount}}</p>
-    {{/if}}
-    <a href="/cancel">Cancel Order</a>
-    <a href="/submitOrder">Submit Order</a>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="order-summary">
+    <h3>Order Summary</h3>
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>Customer Name:</td>
+          <td>{{customerName}}</td>
+        </tr>
+        <tr>
+          <td>Payment:</td>
+          <td>{{payment}}</td>
+        </tr>
+        <tr>
+          <td>{{#if discount}}Total Price After Discount:{{else}}Total Price:{{/if}}</td>
+          <td>{{#if discount}}{{totalPriceAfterDiscount}}{{else}}{{totalPrice}}{{/if}}</td>
+        </tr>
+        <tr>
+          <td>Change:</td>
+          <td>{{difference}}</td>
+        </tr>
+        {{#if discount}}
+        <tr>
+          <td>Combo Name:</td>
+          <td>{{comboName}}</td>
+        </tr>
+        <tr>
+          <td>Discount:</td>
+          <td>{{discount}}</td>
+        </tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="/" class="btn btn-primary">Order Again</a>
 </div>
+
+<style>
+  .order-summary {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+  }
+
+  .order-summary h3 {
+    margin-bottom: 10px;
+  }
+</style>
