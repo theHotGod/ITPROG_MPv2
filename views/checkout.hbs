@@ -37,11 +37,11 @@
                 <td>Discount: {{ discount }}</td>
             </tr>
             <tr>
-                <td>Total Price After Discount: P{{ totalPriceAfterDiscount }}</td>
+                <td>Total Price After Discount: P <span id="totalAfterDiscount"> {{ totalPriceAfterDiscount }} </span></td>
             </tr>
             {{else}}
             <tr>
-                <td>Total Price: P{{ totalPrice }}</td>
+                <td>Total Price: P <span id="totalPrice"> {{ totalPrice }} </span></td>
             </tr>
             {{/if}}
         </tbody>

@@ -8,23 +8,25 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
     function updateSubmitButton() {
         const paymentValue = parseFloat(payment.value);
+        console.log('helll')
+        console.log("payment value: ", paymentValue);
         
         if (document.getElementById('totalAfterDiscount') !== null) {
             const totalAfterDiscountElement = document.getElementById('totalAfterDiscount');
             const totalAfterDiscount = parseFloat(totalAfterDiscountElement.textContent);
-            if (!isNaN(totalAfterDiscount)) {
-                submit.disabled = paymentValue < totalAfterDiscount;
-                return;
-            }
+            console.log(totalAfterDiscount);
+
+            submit.disabled = paymentValue < totalAfterDiscount;
+            return;
+
         }
     
         if (document.getElementById('totalPrice') !== null) {
             const totalPriceElement = document.getElementById('totalPrice');
             const totalPrice = parseFloat(totalPriceElement.textContent);
-            if (!isNaN(totalPrice)) {
-                submit.disabled = paymentValue < totalPrice;
-                return;
-            }
+            console.log(totalPrice)
+            submit.disabled = paymentValue < totalPrice;
+            return;
         }
     
         // If both totalAfterDiscount and totalPrice are invalid, disable the submit button
