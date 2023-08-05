@@ -1,0 +1,18 @@
+{{>nav}}
+
+<div>
+    <h1>Your Order Details</h1>
+    <ul>
+        {{#each cart}}
+        <li>{{this.name}} - Quantity: {{this.quantity}} - Price: {{this.price}}</li>
+        {{/each}}
+    </ul>
+    <p>Total Price: {{totalPrice}}</p>
+    {{#if discount}}
+    <p>Combo Name: {{comboName}}</p>
+    <p>Discount: {{discount}}</p>
+    <p>Total Price After Discount: {{totalPriceAfterDiscount}}</p>
+    {{/if}}
+    <a href="/cancel">Cancel Order</a>
+    <a href="/submitOrder">Submit Order</a>
+</div>
